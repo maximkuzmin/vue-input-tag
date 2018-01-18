@@ -12,7 +12,7 @@ describe('InputTag.vue', () => {
 
   beforeEach((cb) => {
     InputTagComponent = new ClonedComponent({
-      data () { return { tags: [] } }
+      propsData: { tags: [] }
     }).$mount()
     cb()
   })
@@ -63,8 +63,7 @@ describe('InputTag.vue', () => {
 
   describe('read-only="true"', () => {
     const InputTagComponentReadOnly = new ClonedComponent({
-      data () { return { tags: [] } },
-      propsData: { readOnly: true }
+      propsData: { readOnly: true, tags: [] }
     }).$mount()
 
     it('should have a read-only CSS class and shouldn\'t have a remove tag button', () => {
@@ -93,7 +92,7 @@ describe('InputTag.vue', () => {
 
   describe('tags="[1,2,3]"', () => {
     const InputTagComponentWithTags = new ClonedComponent({
-      data () { return { tags: ['Jerry', 'Kramer', 'Elaine'] } }
+      propsData: { tags: ['Jerry', 'Kramer', 'Elaine'] }
     }).$mount()
 
     it('should load the tags', () => {
@@ -112,10 +111,11 @@ describe('InputTag.vue', () => {
     })
   })
 
+
   describe('placeholder="Add Tag"', () => {
     const placeholder = 'Add Tag'
     const InputTagComponentWithPlaceholder = new ClonedComponent({
-      data () { return { placeholder } }
+      propsData: { placeholder }
     }).$mount()
 
     it('should have a placeholder', () => {

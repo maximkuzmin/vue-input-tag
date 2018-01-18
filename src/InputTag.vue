@@ -7,7 +7,7 @@
     digits : new RegExp(/^[\d() \.\:\-\+#]+$/),
     isodate : new RegExp(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/)
   }
-  /*eslint-enable*/
+  /* eslint-enable */
 
   export default {
     name: 'InputTag',
@@ -31,6 +31,10 @@
       validate: {
         type: String,
         default: ''
+      },
+      endOfTagRegex: {
+        type: RegExp,
+        default: () => new RegExp(/,/)
       }
     },
 
@@ -79,6 +83,14 @@
           // avoid passing the observer
           this.onChange(JSON.parse(JSON.stringify(this.tags)))
         }
+      },
+      checkEndOfTagRegex (tag) {
+        if (tag.match(this.endOfTagRegex)) {
+          let tags = tag.split(this.endOfTagRegex)
+          for (let t of tags) {
+            this.addNew(t)
+          }
+        }
       }
     }
   }
@@ -91,7 +103,14 @@
       <span>{{ tag }}</span>
       <a v-if="!readOnly" @click.prevent.stop="remove(index)" class="remove"></a>
     </span>
-    <input v-if="!readOnly" v-bind:placeholder="placeholder" type="text" v-model="newTag" v-on:keydown.delete.stop="removeLastTag()" v-on:keydown.enter.188.tab.prevent.stop="addNew(newTag)" class="new-tag"/>
+    <input v-if="!readOnly"
+           v-bind:placeholder="placeholder"
+           type="text"
+           v-model="newTag"
+           v-on:keydown.delete.stop="removeLastTag()"
+           v-on:keydown.enter.tab.prevent.stop="addNew(newTag)"
+           v-on:keyup="checkEndOfTagRegex(newTag)"
+           class='new-tag' />
   </div>
 
 </template>
